@@ -4,14 +4,7 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Rigidbody))]
 public class DroneMovement : MonoBehaviour
 {
-    [Header("Movimiento")]
-    [SerializeField] private float force = 10f;
-    [SerializeField] private float verticalForce = 8f;
-
-    [Header("Rotación")]
-    [SerializeField] private float rotationSpeedX = 80f;
-    [SerializeField] private float rotationSpeedY = 60f;
-    [SerializeField] private float maxPitchAngle = 60f;
+    [SerializeField] private PlayerSettingsSO data;
 
     [Header("Camera")]
     [SerializeField] private Camera playerCamera;
@@ -61,6 +54,7 @@ public class DroneMovement : MonoBehaviour
     {
         ApplyMovement();
         ApplyRotation();
+        ClampVelocity();
     }
 
     private void ApplyMovement()
@@ -68,13 +62,24 @@ public class DroneMovement : MonoBehaviour
         Vector3 localDirection = new(moveInput.x, verticalInput, moveInput.y);
         Vector3 worldDirection = transform.TransformDirection(localDirection);
 
-        rb.AddForce(worldDirection * force);
-        rb.AddForce(verticalForce * verticalInput * Vector3.up);
+        rb.AddForce(worldDirection * data.Force);
+        rb.AddForce(data.VerticalForce * verticalInput * Vector3.up);
     }
 
     private void ApplyRotation()
     {
-        float angle = lookInput.x * rotationSpeedX * Time.fixedDeltaTime;
+        float angle = lookInput.x * data.RotationSpeedX * Time.fixedDeltaTime;
         transform.Rotate(Vector3.up, angle, Space.World);
+    }
+
+    private void ClampVelocity()
+    {
+        Vector3 horizontal = new(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+        float vertical = rb.linearVelocity.y;
+
+        horizontal = Vector3.ClampMagnitude(horizontal, data.MaxHorizontalSpeed);
+        vertical = Mathf.Clamp(vertical, -data.MaxVerticalSpeed, data.MaxVerticalSpeed);
+
+        rb.linearVelocity = new Vector3(horizontal.x, vertical, horizontal.z);
     }
 }
