@@ -11,12 +11,14 @@ public abstract class StateBase
     protected EnemySettingsSO enemySettingsSO;
     protected NavMeshAgent agent;
     protected GameObject player;
+    protected bool isCivil;
 
     public virtual void Initialize(FsmEnemyManager fsmManager, 
         Animator animator, 
         EnemySettingsSO enemySettingsSO, 
         NavMeshAgent agent,
-        GameObject player
+        GameObject player,
+        bool isCivil
         )
     {
         this.fsmManager = fsmManager;
@@ -24,6 +26,7 @@ public abstract class StateBase
         this.enemySettingsSO = enemySettingsSO;
         this.agent = agent;
         this.player = player;
+        this.isCivil = isCivil;
     }
 
     public virtual void OnEnter()
@@ -36,6 +39,9 @@ public abstract class StateBase
 
     protected bool IsPlayerNearby()
     {
+        if (isCivil)
+            return false;
+
         return Physics.CheckSphere(fsmManager.transform.position, enemySettingsSO.PlayerDetectionRadius, enemySettingsSO.PlayerLayer);
     }
 }

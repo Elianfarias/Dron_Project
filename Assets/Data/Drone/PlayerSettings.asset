@@ -13,13 +13,15 @@ MonoBehaviour:
   m_Name: PlayerSettings
   m_EditorClassIdentifier: Assembly-CSharp::PlayerSettingsSO
   damage: 10
-  force: 10
+  force: 15
   verticalForce: 8
-  maxHorizontalSpeed: 15
+  maxHorizontalSpeed: 25
   maxVerticalSpeed: 20
   rotationSpeedX: 10
   rotationSpeedY: 2
   maxPitchAngle: 80
+  tiltSpeed: 8
+  tiltAngle: 20
   layerCollision:
     serializedVersion: 2
     m_Bits: 2048

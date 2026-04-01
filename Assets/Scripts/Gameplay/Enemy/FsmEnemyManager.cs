@@ -7,6 +7,7 @@ using UnityEngine.AI;
 public class FsmEnemyManager : MonoBehaviour
 {
     [SerializeField] private EnemySettingsSO enemySettingsSO;
+    [SerializeField] private bool isCivil;
 
     private readonly IList<StateBase> stateBases = new List<StateBase>();
     private StateBase currentState;
@@ -21,7 +22,7 @@ public class FsmEnemyManager : MonoBehaviour
         stateBases.Add(new StateHiting());
 
         foreach (var state in stateBases)
-            state.Initialize(this, animator, enemySettingsSO, _agent, player);
+            state.Initialize(this, animator, enemySettingsSO, _agent, player, isCivil);
 
         currentState = FindState(StateType.Running);
     }

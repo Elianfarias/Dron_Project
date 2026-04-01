@@ -8,14 +8,18 @@ public class EnemySettingsSO : ScriptableObject
     [SerializeField] private float obstacleDetectionRadius = 2f;
     [SerializeField] private float playerDetectionRadius = 50f;
     [SerializeField] private float wanderRadius = 15f;
+    [SerializeField] private float wanderCooldown = 2f;
     [SerializeField] private LayerMask obstacleLayer;
     [SerializeField] private LayerMask playerLayer;
+    [SerializeField] private LayerMask enemyLayer;
 
     public int Damage { get { return damage; } }
     public float WaitTime { get { return waitTime; } }
     public float ObstacleDetectionRadius { get { return obstacleDetectionRadius; } }
     public float PlayerDetectionRadius { get { return playerDetectionRadius; } }
     public float WanderRadius { get { return wanderRadius; } }
+    public float WanderCooldown { get { return wanderCooldown; } }
     public LayerMask ObstacleLayer { get { return obstacleLayer; } }
     public LayerMask PlayerLayer { get { return playerLayer; } }
+    public LayerMask EnemyLayer { get { return enemyLayer; } }
 }

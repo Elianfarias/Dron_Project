@@ -448,7 +448,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DroneMovement
   data: {fileID: 11400000, guid: 3b92e60671405ca45a8e19c1705be983, type: 2}
-  playerCamera: {fileID: 0}
+  droneVisual: {fileID: 0}
 --- !u!114 &5726948598870947312
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -4,18 +4,21 @@ using UnityEngine;
 public class PlayerSettingsSO : ScriptableObject
 {
     [SerializeField] private int damage = 10;
-    [Header("Movimiento")]
-    [SerializeField] private float force = 10f;
+    [Header("Movement")]
+    [SerializeField]  private float force = 10f;
     [SerializeField] private float verticalForce = 8f;
     [SerializeField] private float maxHorizontalSpeed = 10f;
     [SerializeField] private float maxVerticalSpeed = 5f;
-    [Header("Rotacion")]
+    [Header("Rotation")]
     [SerializeField] private float rotationSpeedX = 10f;
     [SerializeField] private float rotationSpeedY = 2f;
     [SerializeField] private float maxPitchAngle = 60f;
-    [Header("Capas colisionable")]
+    [SerializeField] private float tiltSpeed = 8f;
+    [SerializeField] private float tiltAngle = 20f;
+    [Header("Layer Collision")]
     [SerializeField] private LayerMask layerCollision;
-
+    [Header("Attack")]
+    [SerializeField] private float cdAttack = 2f;
 
     public int Damage { get { return damage; } }
     public float Force { get { return force; } }
@@ -26,4 +29,7 @@ public class PlayerSettingsSO : ScriptableObject
     public float MaxHorizontalSpeed { get { return maxHorizontalSpeed; } }
     public float MaxVerticalSpeed { get { return maxVerticalSpeed; } }
     public LayerMask LayerCollision { get { return layerCollision; } }
+    public float TiltSpeed { get { return tiltSpeed; } }
+    public float TiltAngle { get { return tiltAngle; } }
+    public float CdAttack { get { return cdAttack; } }
 }
