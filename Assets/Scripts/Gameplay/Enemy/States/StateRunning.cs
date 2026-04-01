@@ -49,7 +49,10 @@ public class StateRunning : StateBase
 
     private bool IsObstacleNearby()
     {
-        return Physics.CheckSphere(fsmManager.transform.position, enemySettingsSO.ObstacleDetectionRadius, enemySettingsSO.ObstacleLayer);
+        if (NavMesh.FindClosestEdge(fsmManager.transform.position, out NavMeshHit hit, NavMesh.AllAreas))
+            return hit.distance < enemySettingsSO.ObstacleDetectionRadius;
+
+        return false;
     }
 
     private bool IsEnemyNearby()

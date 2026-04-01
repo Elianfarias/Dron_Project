@@ -77,7 +77,7 @@ public class DroneMovement : MonoBehaviour
 
     private void ApplyVisualTilt()
     {
-        float targetPitch = moveInput.y * data.TiltAngle;
+        float targetPitch = moveInput.y <= 0 ? (moveInput.y * data.TiltAngle) : (moveInput.y * data.TiltAngle * 0.5f);
         float targetRoll = -moveInput.x * data.TiltAngle;
 
         Quaternion playerRotation = Quaternion.Euler(targetPitch, 0f, targetRoll);
