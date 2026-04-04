@@ -20,9 +20,13 @@ MonoBehaviour:
   rotationSpeedX: 10
   rotationSpeedY: 2
   maxPitchAngle: 80
-  tiltSpeed: 2
+  tiltSpeed: 1
   tiltAngle: 40
   layerCollision:
     serializedVersion: 2
     m_Bits: 2048
+  multiplyDamageCollision: 2
   cdAttack: 2
+  volumeMusic: 0
+  volumeSFX: 0
+  volumeUI: 0

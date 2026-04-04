@@ -1,11 +1,11 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.Gameplay.Systems;
+using UnityEngine;
 
-public class ProjectileController : MonoBehaviour
+public class ProjectileController : MonoBehaviour, IPoolable
 {
     [Header("Config")]
     [SerializeField] private float speed = 100f;
     [SerializeField] private float lifetime = 5f;
-    [SerializeField] private PlayerSettingsSO data;
 
     [Header("VFX")]
     [SerializeField] private GameObject rocketExplosion;
@@ -15,16 +15,17 @@ public class ProjectileController : MonoBehaviour
     [SerializeField] private MeshRenderer projectileMesh;
     [SerializeField] private AudioSource inFlightAudioSource;
 
+    private float damage;
+    private float elapsedTime;
     private bool targetHit;
-    private float spawnTime;
-    private Vector3 travelDirection;
+    private Vector3 origin;
+    private Vector3 initialVelocity;
     private Coroutine returnCoroutine;
 
-    private void OnEnable()
+    public void OnGetFromPool()
     {
         targetHit = false;
-        spawnTime = Time.time;
-        travelDirection = Vector3.zero;
+        elapsedTime = 0f;
 
         if (projectileMesh != null) projectileMesh.enabled = true;
         if (inFlightAudioSource != null) inFlightAudioSource.Play();
@@ -34,7 +35,7 @@ public class ProjectileController : MonoBehaviour
             col.enabled = true;
     }
 
-    private void OnDisable()
+    public void OnReturnToPool()
     {
         if (returnCoroutine != null)
         {
@@ -47,22 +48,36 @@ public class ProjectileController : MonoBehaviour
     {
         if (targetHit) return;
 
-        transform.position += travelDirection * (speed * Time.deltaTime);
+        elapsedTime += Time.deltaTime;
 
-        if (Time.time - spawnTime >= lifetime)
+        transform.position = CalculatePosition(elapsedTime);
+        transform.rotation = CalculateRotation(elapsedTime);
+
+        if (elapsedTime >= lifetime)
             ReturnToPool();
+    }
+
+    private Vector3 CalculatePosition(float t)
+    {
+        return origin
+            + initialVelocity * t
+            + (t * t) * 0.5f * Physics.gravity;
+    }
+
+    private Quaternion CalculateRotation(float t)
+    {
+        Vector3 velocity = initialVelocity + Physics.gravity * t;
+        return velocity != Vector3.zero
+            ? Quaternion.LookRotation(velocity)
+            : transform.rotation;
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        HealthSystem healthSystem = null;
-        if (!enabled || targetHit) return;
+        if (targetHit) return;
 
-        if (collision.collider.TryGetComponent<HealthSystem>(out healthSystem))
-        {
-            if(healthSystem != null)
-                healthSystem.DoDamage(data.Damage);
-        }
+        if (collision.collider.TryGetComponent<HealthSystem>(out HealthSystem healthSystem))
+            healthSystem.DoDamage(damage);
 
         targetHit = true;
         Explode();
@@ -84,34 +99,18 @@ public class ProjectileController : MonoBehaviour
     private System.Collections.IEnumerator ReturnAfterDelay()
     {
         yield return new WaitForSeconds(2f);
-
-        if (BulletPool.Instance != null)
-            BulletPool.Instance.Return(gameObject);
-
-        returnCoroutine = null;
+        ReturnToPool();
     }
 
     private void ReturnToPool()
     {
-        BulletPool.Instance.Return(gameObject);
+        BulletPool.Instance.Return(this);
     }
 
-    public void Launch(Vector3 direction)
+    public void Launch(Vector3 direction, float damage)
     {
-        travelDirection = direction;
-    }
-
-    private void ResetState()
-    {
-        targetHit = false;
-        spawnTime = Time.time;
-        travelDirection = transform.forward;
-
-        if (projectileMesh != null) projectileMesh.enabled = true;
-        if (inFlightAudioSource != null) inFlightAudioSource.Play();
-        if (disableOnHit != null) disableOnHit.Play();
-
-        foreach (Collider col in GetComponents<Collider>())
-            col.enabled = true;
+        this.damage = damage;
+        origin = transform.position;
+        initialVelocity = direction * speed;
     }
 }

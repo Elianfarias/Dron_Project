@@ -6,14 +6,14 @@ public abstract class StateBase
     protected static readonly int State = Animator.StringToHash("State");
     public StateType stateType;
     
-    protected FsmEnemyManager fsmManager;
+    protected FsmNPCManager fsmManager;
     protected Animator animator;
     protected EnemySettingsSO enemySettingsSO;
     protected NavMeshAgent agent;
     protected GameObject player;
     protected bool isCivil;
 
-    public virtual void Initialize(FsmEnemyManager fsmManager, 
+    public virtual void Initialize(FsmNPCManager fsmManager, 
         Animator animator, 
         EnemySettingsSO enemySettingsSO, 
         NavMeshAgent agent,

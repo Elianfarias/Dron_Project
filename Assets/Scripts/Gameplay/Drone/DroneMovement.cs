@@ -48,7 +48,6 @@ public class DroneMovement : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        // * 2 a scriptable
         healthSystem.DoDamage(other.relativeVelocity.magnitude * data.MultiplyDamageCollision);
     }
 

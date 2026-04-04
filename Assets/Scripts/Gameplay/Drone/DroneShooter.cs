@@ -1,3 +1,4 @@
+using Assets.Scripts.Gameplay.Systems;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -19,9 +20,9 @@ public class DroneShooter : MonoBehaviour
 
     private void Shoot()
     {
-        GameObject bullet = BulletPool.Instance.Get();
-        bullet.transform.SetParent(null);
-        bullet.transform.SetPositionAndRotation(firePoint.position, gameObject.transform.rotation);
-        bullet.GetComponent<ProjectileController>().Launch(firePoint.forward);
+        IPoolable poolable = BulletPool.Instance.Get();
+        MonoBehaviour mb = poolable as MonoBehaviour;
+        mb.transform.SetPositionAndRotation(firePoint.position, gameObject.transform.rotation);
+        mb.GetComponent<ProjectileController>().Launch(firePoint.forward, data.Damage);
     }
 }

@@ -3,7 +3,7 @@ using UnityEngine.AI;
 
 public class StateHiting : StateBase
 {
-    public override void Initialize(FsmEnemyManager fsmManager, Animator animator, EnemySettingsSO enemySettingsSO, NavMeshAgent agent, GameObject player, bool isCivil)
+    public override void Initialize(FsmNPCManager fsmManager, Animator animator, EnemySettingsSO enemySettingsSO, NavMeshAgent agent, GameObject player, bool isCivil)
     {
         base.Initialize(fsmManager, animator, enemySettingsSO, agent, player, isCivil);
 

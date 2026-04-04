@@ -1,34 +1,25 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.Gameplay.GameSystem.Object_Pool;
+using Assets.Scripts.Gameplay.Systems;
+using UnityEngine;
 using UnityEngine.Pool;
 
-public class BulletPool : MonoBehaviour
+public class BulletPool : PoolBase
 {
     public static BulletPool Instance { get; private set; }
 
     [SerializeField] private GameObject bulletPrefab;
-    [SerializeField] private int defaultCapacity = 5;
-    [SerializeField] private int maxSize = 30;
-
-    private ObjectPool<GameObject> pool;
 
     private void Awake()
     {
+        DontDestroyOnLoad(gameObject);
         Instance = this;
-        pool = new ObjectPool<GameObject>(
-            createFunc: () => Instantiate(bulletPrefab, transform),
-            actionOnGet: bullet => bullet.SetActive(true),
-            actionOnRelease: bullet => bullet.SetActive(false),
-            actionOnDestroy: bullet => Destroy(bullet),
-            collectionCheck: false,
-            defaultCapacity: defaultCapacity,
-            maxSize: maxSize
-        );
+        base.Initialize();
     }
 
-    public GameObject Get() => pool.Get();
-    public void Return(GameObject bullet)
+    protected override IPoolable CreateNew()
     {
-        bullet.transform.SetParent(transform);
-        pool.Release(bullet);
+        GameObject obj = Instantiate(bulletPrefab, transform);
+        obj.SetActive(false);
+        return obj.GetComponent<IPoolable>();
     }
 }
