@@ -71,8 +71,8 @@ namespace GogoGaga.OptimizedRopesAndCables
         private float prevstiffness;
         private float prevDampness;
         private float prevRopeLength;
-        
-        
+
+
         public bool IsPrefab => gameObject.scene.rootCount == 0;
 
         private void Start()
@@ -122,7 +122,7 @@ namespace GogoGaga.OptimizedRopesAndCables
             {
                 return;
             }
-            
+
             if (AreEndPointsValid())
             {
                 SetSplinePoint();
@@ -270,7 +270,7 @@ namespace GogoGaga.OptimizedRopesAndCables
             {
                 return;
             }
-            
+
             if (AreEndPointsValid())
             {
                 if (!isFirstFrame)
@@ -318,14 +318,14 @@ namespace GogoGaga.OptimizedRopesAndCables
         {
             midPoint = newMidPoint;
             prevMidPointPosition = midPoint == null ? 0.5f : midPointPosition;
-            
+
             if (instantAssign || newMidPoint == null)
             {
                 RecalculateRope();
             }
             NotifyPointsChanged();
         }
-        
+
         public void SetEndPoint(Vector3 newEndPoint, bool instantAssign = false)
         {
             endPoint = newEndPoint;
