@@ -22,7 +22,7 @@ public class DroneShooter : MonoBehaviour
     private void Update()
     {
         if (nextTimeThrowRope > Time.time)
-            rope.startPoint = firePoint.position;
+            rope.startPoint = transform.position;
         else
         {
             if (rope.IsActiveRope())
@@ -47,7 +47,7 @@ public class DroneShooter : MonoBehaviour
         {
             rope.SetActiveRope(true);
             nextTimeThrowRope = Time.time + data.CdRope;
-            rope.endPoint = hitInfo.transform.position;
+            rope.endPoint = hitInfo.point;
         }
     }
 

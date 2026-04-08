@@ -54,7 +54,7 @@ namespace GogoGaga.OptimizedRopesAndCables
         private Vector3 currentValue;
         private Vector3 currentVelocity;
         private Vector3 targetValue;
-        public Vector3 otherPhysicsFactors { get; set; }
+        public Vector3 OtherPhysicsFactors { get; set; }
         private const float valueThreshold = 0.01f;
         private const float velocityThreshold = 0.01f;
 
@@ -248,7 +248,7 @@ namespace GogoGaga.OptimizedRopesAndCables
             //calculate the denominator of the rational Bézier curve
             float denominator = w0 * Mathf.Pow(1 - t, 2) + 2 * w1 * (1 - t) * t + w2 * Mathf.Pow(t, 2);
             //calculate the numerator and devide by the demoninator to get the point on the curve
-            Vector3 point = (wp0 * Mathf.Pow(1 - t, 2) + wp1 * 2 * (1 - t) * t + wp2 * Mathf.Pow(t, 2)) / denominator;
+            Vector3 point = (wp0 * Mathf.Pow(1 - t, 2) + (1 - t) * 2 * t * wp1 + wp2 * Mathf.Pow(t, 2)) / denominator;
 
             return point;
         }
@@ -285,8 +285,8 @@ namespace GogoGaga.OptimizedRopesAndCables
         private void SimulatePhysics()
         {
             float dampingFactor = Mathf.Max(0, 1 - damping * Time.fixedDeltaTime);
-            Vector3 acceleration = (targetValue - currentValue) * stiffness * Time.fixedDeltaTime;
-            currentVelocity = currentVelocity * dampingFactor + acceleration + otherPhysicsFactors;
+            Vector3 acceleration = stiffness * Time.fixedDeltaTime * (targetValue - currentValue);
+            currentVelocity = currentVelocity * dampingFactor + acceleration + OtherPhysicsFactors;
             currentValue += currentVelocity * Time.fixedDeltaTime;
 
             if (Vector3.Distance(currentValue, targetValue) < valueThreshold && currentVelocity.magnitude < velocityThreshold)
@@ -300,17 +300,7 @@ namespace GogoGaga.OptimizedRopesAndCables
         {
             if (!AreEndPointsValid())
                 return;
-
-            Vector3 midPos = GetMidPoint();
-            // Uncomment if you need to visualize midpoint
-            // Gizmos.color = Color.red;
-            // Gizmos.DrawSphere(midPos, 0.2f);
         }
-
-        // New API methods for setting start and end points
-        // with instantAssign parameter to recalculate the rope immediately, without 
-        // animating the rope to the new position.
-        // When newStartPoint or newEndPoint is null, the rope will be recalculated immediately
 
         public void SetStartPoint(Vector3 newStartPoint, bool instantAssign = false)
         {

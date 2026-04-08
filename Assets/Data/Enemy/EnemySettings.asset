@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemySettingsSO
   damage: 20
   obstacleDetectionRadius: 10
+  ropeDetectionRadius: 50
   playerDetectionRadius: 100
   wanderRadius: 500
   wanderCooldown: 2

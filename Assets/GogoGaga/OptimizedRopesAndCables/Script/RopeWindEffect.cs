@@ -87,7 +87,7 @@ namespace GogoGaga.OptimizedRopesAndCables
         void SimulatePhysics()
         {
             Vector3 windEffect = windDirection.normalized * appliedWindForce * Time.fixedDeltaTime;
-            rope.otherPhysicsFactors = windEffect;
+            rope.OtherPhysicsFactors = windEffect;
         }
     }
 }

@@ -24,9 +24,9 @@ namespace GogoGaga.OptimizedRopesAndCables
         private bool isStartOrEndPointMissing;
 
         // Use fields to store lists
-        private List<Vector3> vertices = new List<Vector3>();
-        private List<int> triangles = new List<int>();
-        private List<Vector2> uvs = new List<Vector2>();
+        private readonly List<Vector3> vertices = new();
+        private readonly List<int> triangles = new();
+        private readonly List<Vector2> uvs = new();
 
         private void OnValidate()
         {
@@ -138,8 +138,6 @@ namespace GogoGaga.OptimizedRopesAndCables
                 ropeMesh.Clear();
             }
 
-            Vector3 gameObjectPosition = transform.position;
-
             // Clear the lists before using them
             vertices.Clear();
             triangles.Clear();
@@ -214,14 +212,14 @@ namespace GogoGaga.OptimizedRopesAndCables
 
             // Generate vertices, triangles, and UVs for the end cap
             int endCapCenterIndex = vertices.Count;
-            vertices.Add(transform.InverseTransformPoint(points[points.Length - 1]));
+            vertices.Add(transform.InverseTransformPoint(points[^1]));
             uvs.Add(new Vector2(0.5f, currentLength * tilingPerMeter)); // Center of the cap
-            Quaternion endRotation = Quaternion.LookRotation(points[points.Length - 1] - points[points.Length - 2]);
+            Quaternion endRotation = Quaternion.LookRotation(points[^1] - points[^2]);
             for (int j = 0; j <= segmentsPerWire; j++)
             {
                 float angle = j * Mathf.PI * 2f / segmentsPerWire;
                 Vector3 offset = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0) * radius;
-                vertices.Add(transform.InverseTransformPoint(points[points.Length - 1] + endRotation * offset));
+                vertices.Add(transform.InverseTransformPoint(points[^1] + endRotation * offset));
 
                 if (j < segmentsPerWire)
                 {

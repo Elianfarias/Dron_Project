@@ -48,7 +48,7 @@ public class ScoreManager : MonoBehaviour
     public void AddCivilSavedScore()
     {
         civilSaved++;
-        if(civilSaved >= civilMaxCount)
+        if(civilSaved >= civilCount)
             GameStateManager.Instance.SetGameState(GameState.WIN);
     }
 }
