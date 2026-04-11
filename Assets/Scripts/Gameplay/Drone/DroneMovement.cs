@@ -70,6 +70,7 @@ public class DroneMovement : MonoBehaviour
     {
         Vector3 localDirection = new(moveInput.x, verticalInput, moveInput.y);
         Vector3 worldDirection = transform.TransformDirection(localDirection);
+        Debug.Log($"localDir: {localDirection} | worldDir: {worldDirection} | force: {worldDirection * data.Force}");
         rb.AddForce(worldDirection * data.Force);
         rb.AddForce(data.VerticalForce * verticalInput * Vector3.up);
     }
