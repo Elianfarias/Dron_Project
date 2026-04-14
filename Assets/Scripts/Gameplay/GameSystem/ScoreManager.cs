@@ -1,30 +1,43 @@
+using Assets.Scripts.Gameplay.GameSystem;
 using TMPro;
 using UnityEngine;
 
 public class ScoreManager : MonoBehaviour
 {
+    public static ScoreManager Instance { get; private set; }
+
     [SerializeField] private TMP_Text txtCivil;
     [SerializeField] private TMP_Text txtEnemy;
-    public int civilMaxCount = 4;
-    public int civilCount = 4;
-    public int enemyMaxCount = 8;
-    public int enemyCount = 8;
-    public int civilSaved = 0;
+    [SerializeField] private LevelConfigSO levelConfig;
 
-    public static ScoreManager Instance;
+    public int civilMaxCount;
+    public int civilCount;
+    public int enemyMaxCount;
+    public int enemyCount;
+    public int civilSaved = 0;
 
     private void Awake()
     {
-        if(Instance == null)
+        if (Instance == null)
             Instance = this;
+
+        int level = GetCurrentLevel();
+
+        civilMaxCount = levelConfig.GetCivilCount(level);
+        civilCount = civilMaxCount;
     }
 
     private void Start()
     {
-        civilCount = civilMaxCount;
-        txtCivil.text = civilMaxCount + "/" + civilMaxCount;
-        enemyCount = enemyMaxCount;
-        txtEnemy.text = enemyMaxCount + "/" + enemyMaxCount;
+        txtCivil.text = civilCount + "/" + civilMaxCount;
+    }
+
+    private int GetCurrentLevel()
+    {
+        if (LevelManager.Instance == null)
+            return 1;
+
+        return LevelManager.Instance.CurrentLevel;
     }
 
     public void LessCivilScore()
@@ -48,7 +61,14 @@ public class ScoreManager : MonoBehaviour
     public void AddCivilSavedScore()
     {
         civilSaved++;
-        if(civilSaved >= civilCount)
+        if (civilSaved >= civilCount)
             GameStateManager.Instance.SetGameState(GameState.WIN);
+    }
+
+    public void SetEnemyCount(int count)
+    {
+        enemyMaxCount = count;
+        enemyCount = count;
+        txtEnemy.text = enemyCount + "/" + enemyMaxCount;
     }
 }

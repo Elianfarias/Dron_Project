@@ -177,7 +177,9 @@ namespace GogoGaga.OptimizedRopesAndCables
             capsuleCollider.center = transform.InverseTransformPoint(worldCenter);
             capsuleCollider.height = Vector3.Distance(startPoint, endPoint);
             capsuleCollider.radius = ropeWidth / 2f;
-            transform.rotation = Quaternion.LookRotation(endPoint - startPoint);
+            
+            if(endPoint != Vector3.zero && startPoint != Vector3.zero)
+                transform.rotation = Quaternion.LookRotation(endPoint - startPoint);
         }
 
         private bool AreEndPointsValid()
